@@ -1,0 +1,36 @@
+body {
+    background-color: #f5f6fa;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.dashboard-card {
+    border: none;
+    transition: transform 0.2s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+.dashboard-card h2 {
+    margin-top: 10px;
+}
+
+.card {
+    border: none;
+}
+
+table {
+    background-color: white;
+}
+
+textarea {
+    resize: vertical;
+}
+
+label {
+    font-weight: 600;
+}
