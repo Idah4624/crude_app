@@ -117,45 +117,140 @@ def logout():
 # --------------------------------------------------
 # DASHBOARD
 # --------------------------------------------------
-
 @app.route("/")
 @login_required
 def dashboard():
 
-    conn = get_db_connection()
+    connection = get_db_connection()
 
-    total_students = conn.execute(
+    # -----------------------------------------
+    # BASIC STATISTICS
+    # -----------------------------------------
+
+    total_students = connection.execute(
         "SELECT COUNT(*) FROM students"
     ).fetchone()[0]
 
-    total_courses = conn.execute(
+    total_courses = connection.execute(
         "SELECT COUNT(DISTINCT course) FROM students"
     ).fetchone()[0]
 
-    male_students = conn.execute(
+    male_students = connection.execute(
         "SELECT COUNT(*) FROM students WHERE gender = 'Male'"
     ).fetchone()[0]
 
-    female_students = conn.execute(
+    female_students = connection.execute(
         "SELECT COUNT(*) FROM students WHERE gender = 'Female'"
     ).fetchone()[0]
 
-    recent_students = conn.execute("""
+
+    # -----------------------------------------
+    # STUDENTS BY COURSE
+    # -----------------------------------------
+
+    course_data = connection.execute("""
+        SELECT course, COUNT(*) AS total
+        FROM students
+        GROUP BY course
+        ORDER BY total DESC
+    """).fetchall()
+
+
+    # -----------------------------------------
+    # STUDENTS BY GENDER
+    # -----------------------------------------
+
+    gender_data = connection.execute("""
+        SELECT gender, COUNT(*) AS total
+        FROM students
+        GROUP BY gender
+    """).fetchall()
+
+
+    # -----------------------------------------
+    # RECENT STUDENTS
+    # -----------------------------------------
+
+    recent_students = connection.execute("""
         SELECT *
         FROM students
         ORDER BY id DESC
         LIMIT 5
     """).fetchall()
 
-    conn.close()
+
+    # -----------------------------------------
+    # MONTHLY REGISTRATIONS
+    # -----------------------------------------
+
+    monthly_data = connection.execute("""
+        SELECT
+            strftime('%Y-%m', registration_date) AS month,
+            COUNT(*) AS total
+        FROM students
+        GROUP BY month
+        ORDER BY month
+    """).fetchall()
+
+
+    connection.close()
+
+
+    # -----------------------------------------
+    # PREPARE DATA FOR CHARTS
+    # -----------------------------------------
+
+    course_labels = [
+        row["course"]
+        for row in course_data
+    ]
+
+    course_values = [
+        row["total"]
+        for row in course_data
+    ]
+
+
+    gender_labels = [
+        row["gender"]
+        for row in gender_data
+    ]
+
+    gender_values = [
+        row["total"]
+        for row in gender_data
+    ]
+
+
+    monthly_labels = [
+        row["month"]
+        for row in monthly_data
+    ]
+
+    monthly_values = [
+        row["total"]
+        for row in monthly_data
+    ]
+
 
     return render_template(
         "dashboard.html",
+
         total_students=total_students,
         total_courses=total_courses,
         male_students=male_students,
         female_students=female_students,
-        recent_students=recent_students
+
+        recent_students=recent_students,
+
+        course_labels=course_labels,
+        course_values=course_values,
+
+        gender_labels=gender_labels,
+        gender_values=gender_values,
+
+        monthly_labels=monthly_labels,
+        monthly_values=monthly_values
     )
 
 

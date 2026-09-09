@@ -34,3 +34,85 @@ textarea {
 label {
     font-weight: 600;
 }
+
+
+/* ==========================================
+   DASHBOARD
+========================================== */
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+/* ==========================================
+   STATISTICS CARDS
+========================================== */
+
+.dashboard-stat-card {
+    border: none;
+    border-radius: 12px;
+    transition: 0.2s ease;
+}
+
+.dashboard-stat-card:hover {
+    transform: translateY(-4px);
+}
+
+.dashboard-icon {
+    font-size: 35px;
+}
+
+
+/* ==========================================
+   CHART CARDS
+========================================== */
+
+.chart-card {
+    border: none;
+    border-radius: 12px;
+}
+
+
+/* ==========================================
+   CHART SIZE
+========================================== */
+
+.chart-container {
+    position: relative;
+    height: 300px;
+}
+
+
+/* ==========================================
+   DASHBOARD TABLE
+========================================== */
+
+.dashboard-stat-card h2 {
+    margin-bottom: 0;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+
+/* ==========================================
+   MOBILE RESPONSIVENESS
+========================================== */
+
+@media (max-width: 768px) {
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .dashboard-header .btn {
+        width: 100%;
+    }
+
+}
